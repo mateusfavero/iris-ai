@@ -117,7 +117,7 @@ const UploadZone = ({ onUpload }: UploadZoneProps) => {
                 <Upload className="h-8 w-8 text-accent-foreground" />
               )}
             </div>
-            <h3 className="text-lg font-semibold mb-2">
+            <h3 className="text-lg font-semibold mb-2 text-center">
               Arraste uma imagem ou clique para selecionar
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
