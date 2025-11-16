@@ -119,12 +119,7 @@ const Index = () => {
             </div> */}
           </div>
 
-          {/* Upload Zone */}
-          <div className="mb-8">
-            <UploadZone onUpload={handleUpload} />
-          </div>
-
-          {/* Help / Examples */}
+          {/* Help / Examples (kept here but UI re-ordered below) */}
           <div className="mb-6 p-4 bg-muted/30 rounded">
             <h4 className="text-lg font-semibold mb-2">Dúvidas sobre as imagens?</h4>
             <p className="text-sm text-muted-foreground mb-3">
@@ -155,6 +150,44 @@ const Index = () => {
                 </ul>
               </div>
             </div>
+          </div>
+
+          {/* Info Section (passo-a-passo) - moved above Upload */}
+          <div className="mt-16 text-center">
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="p-6">
+                <div className="w-12 h-12 rounded-full bg-accent mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-accent-foreground">1</span>
+                </div>
+                <h3 className="font-semibold mb-2">Faça Upload</h3>
+                <p className="text-sm text-muted-foreground">
+                  Envie uma imagem de exame médico em formato JPG
+                </p>
+              </div>
+              <div className="p-6">
+                <div className="w-12 h-12 rounded-full bg-accent mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-accent-foreground">2</span>
+                </div>
+                <h3 className="font-semibold mb-2">Análise Automática</h3>
+                <p className="text-sm text-muted-foreground">
+                  Nosso modelo de ML processa e classifica a imagem
+                </p>
+              </div>
+              <div className="p-6">
+                <div className="w-12 h-12 rounded-full bg-accent mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-accent-foreground">3</span>
+                </div>
+                <h3 className="font-semibold mb-2">Receba o Resultado</h3>
+                <p className="text-sm text-muted-foreground">
+                  Veja o tipo de exame identificado e o diagnóstico
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Upload Zone */}
+          <div className="mb-8 mt-8">
+            <UploadZone onUpload={handleUpload} />
           </div>
 
           {/* Loading State */}
