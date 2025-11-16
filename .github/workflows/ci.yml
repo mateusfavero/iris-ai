@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  frontend-build:
+    name: Frontend — build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: |
+          npm ci
+      - name: Build
+        run: |
+          npm run build
+
+  backend-check:
+    name: Backend — syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Quick static checks (py_compile)
+        run: |
+          python -m py_compile backend-example/*.py
+        shell: bash
+
+  # Optional: heavy backend integration tests that require models/TF are intentionally omitted
+  # from the default CI workflow because they are large and slow to install on GitHub Actions.
+  # If you want a full integration job, consider adding a separate workflow or a self-hosted runner
+  # with the required GPU/CPU resources and cached model artifacts.
