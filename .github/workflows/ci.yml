@@ -19,6 +19,9 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
+      - name: Lint
+        run: |
+          npm run lint
       - name: Build
         run: |
           npm run build
@@ -32,10 +35,17 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+      - name: Install Python lint tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install black flake8
       - name: Quick static checks (py_compile)
         run: |
           python -m py_compile backend-example/*.py
-        shell: bash
+      - name: Python lint (black + flake8)
+        run: |
+          black --check backend-example || true
+          flake8 backend-example || true
 
   # Optional: heavy backend integration tests that require models/TF are intentionally omitted
   # from the default CI workflow because they are large and slow to install on GitHub Actions.
