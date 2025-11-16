@@ -49,29 +49,37 @@ const Index = () => {
       const data = await response.json();
       setRawResponse(data);
 
-      // Ajusta o formato para o tipo esperado
-      const realResult: AnalysisResult = {
-        examType: data.examType || "Desconhecido",
-        diagnosis: data.diagnosis || "Sem diagnóstico disponível",
-        confidence: typeof data.confidence === "number" ? data.confidence : 0,
-      };
+      // Suporte a novo formato: { organ_classifier: { examType, diagnosis, confidence }, specialist: {...} }
+      // Também mantém compatibilidade com o formato antigo: { examType, diagnosis, confidence }
+      let examType = "Desconhecido";
+      let diagnosis = "Sem diagnóstico disponível";
+      let confidence = 0;
+
+      // Prioriza o resultado especialista, se existir
+      if (data && data.specialist) {
+        examType = data.specialist.examType || examType;
+        diagnosis = data.specialist.diagnosis || data.specialist.predicted_class || diagnosis;
+        confidence = typeof data.specialist.confidence === "number" ? data.specialist.confidence : confidence;
+      } else if (data && data.organ_classifier) {
+        examType = data.organ_classifier.examType || examType;
+        diagnosis = data.organ_classifier.diagnosis || diagnosis;
+        confidence = typeof data.organ_classifier.confidence === "number" ? data.organ_classifier.confidence : confidence;
+      } else if (data && (data.examType || data.diagnosis || typeof data.confidence === 'number')) {
+        examType = data.examType || examType;
+        diagnosis = data.diagnosis || diagnosis;
+        confidence = typeof data.confidence === "number" ? data.confidence : confidence;
+      }
+
+      const realResult: AnalysisResult = { examType, diagnosis, confidence };
 
       setResult(realResult);
       toast.success("Análise concluída com sucesso!");
     } catch (error) {
       console.error("Erro na análise:", error);
-      toast.error("Erro ao analisar a imagem. Usando resultado mock.");
-
-      // Fallback: mantém um resultado mock para que a UI continue funcionando
-      const mockResult: AnalysisResult = {
-        examType: "Raio-X Torácico",
-        diagnosis:
-          "Exame dentro dos padrões de normalidade. Não foram identificadas alterações significativas nas estruturas pulmonares e cardíacas.",
-        confidence: 94,
-      };
-
+      toast.error("Erro ao analisar a imagem. Verifique o backend ou tente novamente.");
+      // Não inserir um mock específico; mantemos a UI sem resultado real.
       setRawResponse(null);
-      setResult(mockResult);
+      setResult(null);
     } finally {
       setIsAnalyzing(false);
     }
@@ -116,6 +124,39 @@ const Index = () => {
             <UploadZone onUpload={handleUpload} />
           </div>
 
+          {/* Help / Examples */}
+          <div className="mb-6 p-4 bg-muted/30 rounded">
+            <h4 className="text-lg font-semibold mb-2">Dúvidas sobre as imagens?</h4>
+            <p className="text-sm text-muted-foreground mb-3">
+              Envie imagens claras do exame. Evite fotos desfocadas, com iluminação ruim ou cortes muito próximos.
+              Abaixo há exemplos de estilos aceitáveis (placeholders):
+            </p>
+            <div className="flex gap-4 items-start">
+              <div className="grid grid-cols-2 gap-2">
+                <div className="w-36 h-24 bg-black/40 rounded overflow-hidden">
+                  <img src="/colonca1.jpeg" alt="exemplo histologia" className="w-full h-full object-cover" />
+                </div>
+                <div className="w-36 h-24 bg-black/40 rounded overflow-hidden">
+                  <img src="/ISIC_0024329.jpg" alt="exemplo dermoscopia" className="w-full h-full object-cover" />
+                </div>
+                <div className="w-36 h-24 bg-black/40 rounded overflow-hidden">
+                  <img src="/Tr-no_0010.jpg" alt="exemplo MRI" className="w-full h-full object-cover" />
+                </div>
+                <div className="w-36 h-24 bg-black/40 rounded overflow-hidden">
+                  <img src="/Tr-pi_0010.jpg" alt="exemplo CT" className="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div className="ml-2 text-sm text-muted-foreground">
+                <p className="mb-1"><strong>Dicas rápidas:</strong></p>
+                <ul className="list-disc pl-4">
+                  <li>Use JPG/PNG em boa resolução.</li>
+                  <li>Centralize a área de interesse.</li>
+                  <li>Evite legendas e marcas d'água sobre a região.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
           {/* Loading State */}
           {isAnalyzing && (
             <div className="flex flex-col items-center justify-center py-12 animate-in fade-in-50">
@@ -134,6 +175,7 @@ const Index = () => {
                 examType={result.examType}
                 diagnosis={result.diagnosis}
                 confidence={result.confidence}
+                rawResponse={rawResponse}
               />
               {rawResponse && (
                 <div className="mt-4 p-4 bg-muted/50 rounded">
