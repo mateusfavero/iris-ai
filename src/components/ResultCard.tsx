@@ -6,9 +6,10 @@ interface ResultCardProps {
   examType: string;
   diagnosis: string;
   confidence: number;
+  rawResponse?: any;
 }
 
-const ResultCard = ({ examType, diagnosis, confidence }: ResultCardProps) => {
+const ResultCard = ({ examType, diagnosis, confidence, rawResponse }: ResultCardProps) => {
   return (
     <Card
       className="p-6 animate-in fade-in-50 slide-in-from-bottom-4 duration-500"
@@ -27,6 +28,9 @@ const ResultCard = ({ examType, diagnosis, confidence }: ResultCardProps) => {
               </span>
             </div>
             <h3 className="text-2xl font-bold text-foreground">{examType}</h3>
+            {rawResponse && rawResponse.organ_classifier && (
+              <p className="text-sm text-muted-foreground">Órgão identificado: {rawResponse.organ_classifier.diagnosis}</p>
+            )}
           </div>
 
           <div className="border-t border-border pt-4">
@@ -36,11 +40,19 @@ const ResultCard = ({ examType, diagnosis, confidence }: ResultCardProps) => {
             <p className="text-lg text-foreground leading-relaxed">
               {diagnosis}
             </p>
+            {rawResponse && rawResponse.specialist && (
+              <div className="mt-3 p-3 bg-muted/10 rounded">
+                <h5 className="text-sm font-medium">Diagnóstico especialista</h5>
+                <p className="text-sm">Classe: <strong>{rawResponse.specialist.predicted_class}</strong></p>
+                <p className="text-sm">Interpretação: {rawResponse.specialist.diagnosis}</p>
+                <p className="text-sm">Confiança: {Number(rawResponse.specialist.confidence).toFixed(2)}%</p>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="text-xs">
-              Confiança: {confidence}%
+              Confiança: {confidence.toFixed(2)}%
             </Badge>
           </div>
         </div>

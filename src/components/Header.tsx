@@ -10,9 +10,7 @@ const Header = () => {
           </div>
           <span className="text-xl font-bold">Iris AI</span>
         </div>
-        <Button variant="default" size="sm">
-          Sign In
-        </Button>
+        {/* login removed to keep project local and authorial */}
       </div>
     </header>
   );
