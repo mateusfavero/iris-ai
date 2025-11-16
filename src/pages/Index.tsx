@@ -168,7 +168,7 @@ const Index = () => {
               )}
 
               {/* Results */}
-              {result && !isAnalyzing && (
+              {/* {result && !isAnalyzing && (
                 <div className="space-y-6">
                   <h2 className="text-2xl font-bold">Resultado da Análise</h2>
                   <ResultCard
@@ -186,7 +186,7 @@ const Index = () => {
                     </div>
                   )}
                 </div>
-              )}
+              )} */}
             </div>
 
             <div>
@@ -194,24 +194,24 @@ const Index = () => {
                 <h4 className="text-lg font-semibold mb-2">Dúvidas sobre as imagens?</h4>
                 <p className="text-sm text-muted-foreground mb-3">
                   Envie imagens claras do exame. Evite fotos desfocadas, com iluminação ruim ou cortes muito próximos.
-                  Abaixo há exemplos de estilos aceitáveis (placeholders):
+                  Abaixo há exemplos de estilos aceitáveis:
                 </p>
-                <div className="flex gap-4 items-start">
+                <div className="grid gap-3">
                   <div className="grid grid-cols-2 gap-2">
-                    <div className="w-36 h-24 bg-black/40 rounded overflow-hidden">
+                    <div className="w-36 h-24 bg-slate-100 rounded overflow-hidden">
                       <img src="/colonca1.jpeg" alt="exemplo histologia" className="w-full h-full object-cover" />
                     </div>
-                    <div className="w-36 h-24 bg-black/40 rounded overflow-hidden">
+                    <div className="w-36 h-24 bg-slate-100 rounded overflow-hidden">
                       <img src="/ISIC_0024329.jpg" alt="exemplo dermoscopia" className="w-full h-full object-cover" />
                     </div>
-                    <div className="w-36 h-24 bg-black/40 rounded overflow-hidden">
+                    <div className="w-36 h-24 bg-slate-100 rounded overflow-hidden">
                       <img src="/Tr-no_0010.jpg" alt="exemplo MRI" className="w-full h-full object-cover" />
                     </div>
-                    <div className="w-36 h-24 bg-black/40 rounded overflow-hidden">
+                    <div className="w-36 h-24 bg-slate-100 rounded overflow-hidden">
                       <img src="/Tr-pi_0010.jpg" alt="exemplo CT" className="w-full h-full object-cover" />
                     </div>
                   </div>
-                  <div className="ml-2 text-sm text-muted-foreground">
+                  <div className="text-sm text-muted-foreground">
                     <p className="mb-1"><strong>Dicas rápidas:</strong></p>
                     <ul className="list-disc pl-4">
                       <li>Use JPG/PNG em boa resolução.</li>
@@ -244,19 +244,19 @@ const Index = () => {
                 confidence={result.confidence}
                 rawResponse={rawResponse}
               />
-              {rawResponse && (
+              {/* {rawResponse && (
                 <div className="mt-4 p-4 bg-muted/50 rounded">
                   <h3 className="text-sm font-medium mb-2">Resposta bruta (debug)</h3>
                   <pre className="text-xs overflow-auto max-h-48 p-2 bg-card rounded">
                     {JSON.stringify(rawResponse, null, 2)}
                   </pre>
                 </div>
-              )}
+              )} */}
             </div>
           )}
 
           {/* Info Section */}
-          {!result && !isAnalyzing && (
+          {/* {!result && !isAnalyzing && (
             <div className="mt-16 text-center">
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="p-6">
@@ -288,7 +288,7 @@ const Index = () => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </main>
     </div>
