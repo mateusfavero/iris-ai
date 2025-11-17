@@ -1,16 +1,3 @@
-"""
-EXEMPLO DE BACKEND FLASK PARA INTEGRAÇÃO COM O MODELO DE ML
-
-Este é um exemplo básico de como criar um backend Flask que recebe
-imagens e retorna a classificação e diagnóstico.
-
-Para usar este exemplo:
-1. Instale as dependências: pip install flask flask-cors pillow tensorflow numpy
-2. Substitua a função mock_model_prediction() pela sua lógica real de ML
-3. Execute: python app.py
-4. O servidor estará rodando em http://localhost:5000
-"""
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from PIL import Image
