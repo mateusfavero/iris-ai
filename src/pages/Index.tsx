@@ -160,12 +160,12 @@ const Index = () => {
               </div>
 
               {/* Loading State */}
-              {isAnalyzing && (
+              {/* {isAnalyzing && (
                 <div className="flex flex-col items-center justify-center py-12 animate-in fade-in-50">
                   <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
                   <p className="text-lg text-muted-foreground">Analisando imagem...</p>
                 </div>
-              )}
+              )} */}
 
               {/* Results */}
               {/* {result && !isAnalyzing && (
@@ -198,16 +198,16 @@ const Index = () => {
                 </p>
                 <div className="grid gap-3">
                   <div className="grid grid-cols-2 gap-2">
-                    <div className="w-36 h-24 bg-slate-100 rounded overflow-hidden">
+                    <div className="aspect-[4/3] w-full bg-slate-100 rounded overflow-hidden">
                       <img src="/colonca1.jpeg" alt="exemplo histologia" className="w-full h-full object-cover" />
                     </div>
-                    <div className="w-36 h-24 bg-slate-100 rounded overflow-hidden">
+                    <div className="aspect-[4/3] w-full bg-slate-100 rounded overflow-hidden">
                       <img src="/ISIC_0024329.jpg" alt="exemplo dermoscopia" className="w-full h-full object-cover" />
                     </div>
-                    <div className="w-36 h-24 bg-slate-100 rounded overflow-hidden">
+                    <div className="aspect-[4/3] w-full bg-slate-100 rounded overflow-hidden">
                       <img src="/Tr-no_0010.jpg" alt="exemplo MRI" className="w-full h-full object-cover" />
                     </div>
-                    <div className="w-36 h-24 bg-slate-100 rounded overflow-hidden">
+                    <div className="aspect-[4/3] w-full bg-slate-100 rounded overflow-hidden">
                       <img src="/Tr-pi_0010.jpg" alt="exemplo CT" className="w-full h-full object-cover" />
                     </div>
                   </div>
