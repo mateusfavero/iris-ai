@@ -55,6 +55,56 @@ const UploadZone = ({ onUpload }: UploadZoneProps) => {
     };
     reader.readAsDataURL(file);
     onUpload(file);
+    // depois de anexar a imagem, rola suavemente até a seção de resultados
+    // usa polling curto para esperar que o elemento de resultado exista e que
+    // eventuais imagens internas estejam carregadas — evita saltos bruscos
+    const animateScrollTo = (to: number, duration = 700) => {
+      const start = window.scrollY || window.pageYOffset;
+      const change = to - start;
+      const startTime = performance.now();
+      const easeInOutQuad = (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
+
+      const tick = (now: number) => {
+        const elapsed = now - startTime;
+        const t = Math.min(1, elapsed / duration);
+        const eased = easeInOutQuad(t);
+        window.scrollTo(0, Math.round(start + change * eased));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+
+      requestAnimationFrame(tick);
+    };
+
+    const scrollToResult = () => {
+      const ids = ['results', 'diagnostic-result', 'result'];
+      let attempts = 0;
+      const maxAttempts = 15; // até ~0.9s (mais responsivo)
+      const interval = 60; // checa com maior frequência para iniciar a rolagem rapidamente
+      const watcher = setInterval(() => {
+        attempts++;
+        const target = ids.map((id) => document.getElementById(id)).find(Boolean) as HTMLElement | undefined;
+        if (target) {
+          // se houver imagens dentro do target, aguarda carregamento completo
+          const imgs = Array.from(target.querySelectorAll('img')) as HTMLImageElement[];
+          const allLoaded = imgs.every((img) => img.complete && img.naturalHeight !== 0);
+          if (!allLoaded && attempts < maxAttempts) {
+            return; // aguarda mais um ciclo
+          }
+          clearInterval(watcher);
+          // calcula posição centralizada para o target
+          const rect = target.getBoundingClientRect();
+          const targetTop = rect.top + window.scrollY - (window.innerHeight / 2) + rect.height / 2;
+          animateScrollTo(Math.max(0, Math.round(targetTop)), 700);
+        } else if (attempts >= maxAttempts) {
+          clearInterval(watcher);
+          // fallback: rola até o final da página de forma suave
+          animateScrollTo(document.body.scrollHeight, 700);
+        }
+      }, interval);
+    };
+
+    // pequeno atraso inicial para permitir atualizações do React, mas muito curto
+    setTimeout(scrollToResult, 50);
   };
 
   const clearFile = () => {
@@ -120,6 +170,7 @@ const UploadZone = ({ onUpload }: UploadZoneProps) => {
             <h3 className="text-lg font-semibold mb-2 text-center">
               Arraste uma imagem ou clique para selecionar
             </h3>
+
             <p className="text-sm text-muted-foreground mb-4">
               Formatos suportados: JPG, PNG, WEBP
             </p>
